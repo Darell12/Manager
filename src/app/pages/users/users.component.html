@@ -1,0 +1,58 @@
+<section class="bg-gray-2 rounded-xl">
+  <div class="p-8 shadow-lg max-h-[75vh] overflow-y-auto">
+    <table class="table-hover table">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Tenencia</th>
+          <th>Dominio</th>
+          <th>Días Restantes</th>
+          <th>Estado</th>
+          <th>Expedición</th>
+          <th>Vencimiento</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of users(); track $index) {
+        <tr>
+          <th>{{ $index + 1 }}</th>
+          <td>{{ row.id }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.email }}</td>
+          <td>{{ row.active }}</td>
+          <td>{{ row.identification }}</td>
+          <td>{{ row.address }}</td>
+          <td>
+            <div class="dropdown">
+              <label class="btn btn-ghost btn-sm" tabindex="0">
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 4 15"
+                >
+                  <path
+                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                  />
+                </svg>
+              </label>
+              <div class="dropdown-menu dropdown-menu-left">
+                <label class="dropdown-item text-sm">Refrescar</label>
+                <label class="dropdown-item text-sm" for="modal-tenancy"
+                  >Previsualizar Embed</label
+                >
+                <a class="dropdown-item text-sm" target="_blank"
+                  >Previsualizar</a
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+<button (click)="loadNextPage()">Cargar siguiente página</button>

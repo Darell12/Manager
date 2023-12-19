@@ -1,0 +1,70 @@
+<section class="bg-gray-2 rounded-xl">
+  <div class="p-8 shadow-lg">
+    <form class="space-y-4 mb-6">
+      <div class="flex gap-4">
+        <div>
+          <label class="sr-only" for="email">Nombre del Recurso</label>
+          <input
+            class="input input-solid"
+            placeholder="Hidrología"
+            type="search"
+            id="name"
+          />
+        </div>
+        <div>
+          <button
+            type="button"
+            class="rounded-lg btn btn-primary"
+            (click)="buscar_recurso(inputValue)"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+    </form>
+    <table class="table-hover table">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Tenencia</th>
+          <th>Codigo del Curso</th>
+          <th>Nombre del Curso</th>
+          <th>Nombre de lección</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading) {
+        <tr>
+          <th><div class="skeleton h-5 rounded-md"></div></th>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+        </tr>
+        <tr>
+          <th><div class="skeleton h-5 rounded-md"></div></th>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+        </tr>
+        <tr>
+          <th><div class="skeleton h-5 rounded-md"></div></th>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+        </tr>
+        } @else { @for (row of resultados; track $index) {
+        <tr>
+          <th>{{ $index + 1 }}</th>
+          <td>{{ row.esquema }}</td>
+          <td>{{ row.code }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.course_status_id | courseStatus }}</td>
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+</section>
