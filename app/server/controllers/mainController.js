@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarUsuarios = exports.buscarSCORM = exports.verificarSsl = exports.obtenerDominios = exports.obtenerEsquemas = void 0;
+exports.buscarUsuarios = exports.contarUsuarios = exports.buscarSCORM = exports.verificarSsl = exports.obtenerDominios = exports.obtenerEsquemas = void 0;
 const axios_1 = require("axios");
 const pg_1 = require("pg");
 // * CONEXION TENENCIAS
@@ -135,6 +135,55 @@ const buscarSCORM = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.buscarSCORM = buscarSCORM;
+const contarUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const esquemaAIgnorar = 'wrocolombia';
+    const tablaName = 'users';
+    const result = yield pool.query("SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_name = 'users'");
+    const esquemas = result.rows.map((row) => row.table_schema);
+    const esquemasFiltrados = esquemas.filter((esquema) => esquema !== esquemaAIgnorar);
+    if (poolM) {
+        esquemasFiltrados.push('mangus');
+    }
+    // Función para ejecutar la consulta para un esquema específico en una conexión dada
+    const executeQueryForSchema = (currentEsquema, currentPool) => __awaiter(void 0, void 0, void 0, function* () {
+        // Verificar si estamos en la conexión poolM y el esquema no es 'mangus'
+        if (currentPool === poolM && currentEsquema !== 'mangus') {
+            console.log(`Ignorando el esquema ${currentEsquema} en la conexión poolM`);
+            return [];
+        }
+        if (currentPool === pool && currentEsquema === 'mangus') {
+            console.log(`Ignorando el esquema ${currentEsquema} en la conexión pool`);
+            return [];
+        }
+        const query = `
+    SELECT '${currentEsquema}' AS esquema, COUNT(*)
+    FROM "${currentEsquema}"."${tablaName}" tabla1
+    WHERE tabla1.active = true
+  `;
+        try {
+            const result = yield currentPool.query(query);
+            return result.rows;
+        }
+        catch (error) {
+            console.error(`Error al obtener datos para el esquema ${currentEsquema} en la conexión ${currentPool}:`, error);
+            throw new Error(`Error al obtener datos para el esquema ${currentEsquema} en la conexión ${currentPool}`);
+        }
+    });
+    try {
+        // Ejecuta la consulta para cada esquema filtrado en ambas conexiones
+        const [resultadosPorEsquemaPool, resultadosPorEsquemaPoolM] = yield Promise.all([
+            Promise.all(esquemasFiltrados.map((esquema) => executeQueryForSchema(esquema, pool))),
+            Promise.all(esquemasFiltrados.map((esquema) => executeQueryForSchema(esquema, poolM))),
+        ]);
+        // Combina los resultados de ambas conexiones en un solo array
+        const datos = [].concat(...resultadosPorEsquemaPool, ...resultadosPorEsquemaPoolM);
+        res.json(datos);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Error al obtener datos' });
+    }
+});
+exports.contarUsuarios = contarUsuarios;
 const buscarUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { page = 1, pageSize = 10 } = req.query;

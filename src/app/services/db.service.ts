@@ -26,4 +26,10 @@ export class DbService {
       `${this.apiUrl}/users?page=${currentPage}&pageSize=${pageSize}`
     );
   }
+
+  conteoUsuarios(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/contar`
+    );
+  }
 }

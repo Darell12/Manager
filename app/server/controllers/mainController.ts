@@ -166,6 +166,91 @@ export const buscarSCORM = async (req: any, res: any) => {
   }
 };
 
+export const contarUsuarios = async (req: any, res: any) => {
+
+  const esquemaAIgnorar = 'wrocolombia';
+
+  const tablaName = 'users';
+
+  const result: QueryResult = await pool.query(
+    "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_name = 'users'"
+  );
+
+  const esquemas: string[] = result.rows.map((row) => row.table_schema);
+  const esquemasFiltrados = esquemas.filter(
+    (esquema) => esquema !== esquemaAIgnorar
+  );
+
+  if (poolM) {
+    esquemasFiltrados.push('mangus');
+  }
+
+  // Función para ejecutar la consulta para un esquema específico en una conexión dada
+  const executeQueryForSchema = async (
+    currentEsquema: any,
+    currentPool: any
+  ) => {
+    // Verificar si estamos en la conexión poolM y el esquema no es 'mangus'
+    if (currentPool === poolM && currentEsquema !== 'mangus') {
+      console.log(
+        `Ignorando el esquema ${currentEsquema} en la conexión poolM`
+      );
+      return [];
+    }
+
+    if (currentPool === pool && currentEsquema === 'mangus') {
+      console.log(`Ignorando el esquema ${currentEsquema} en la conexión pool`);
+      return [];
+    }
+
+    const query = `
+    SELECT '${currentEsquema}' AS esquema, COUNT(*)
+    FROM "${currentEsquema}"."${tablaName}" tabla1
+    WHERE tabla1.active = true
+  `;
+
+    try {
+      const result: QueryResult = await currentPool.query(query);
+      return result.rows;
+    } catch (error) {
+      console.error(
+        `Error al obtener datos para el esquema ${currentEsquema} en la conexión ${currentPool}:`,
+        error
+      );
+      throw new Error(
+        `Error al obtener datos para el esquema ${currentEsquema} en la conexión ${currentPool}`
+      );
+    }
+  };
+
+  try {
+    // Ejecuta la consulta para cada esquema filtrado en ambas conexiones
+    const [resultadosPorEsquemaPool, resultadosPorEsquemaPoolM] =
+      await Promise.all([
+        Promise.all(
+          esquemasFiltrados.map((esquema) =>
+            executeQueryForSchema(esquema, pool)
+          )
+        ),
+        Promise.all(
+          esquemasFiltrados.map((esquema) =>
+            executeQueryForSchema(esquema, poolM)
+          )
+        ),
+      ]);
+
+    // Combina los resultados de ambas conexiones en un solo array
+    const datos: Array<any> = ([] as any[]).concat(
+      ...resultadosPorEsquemaPool,
+      ...resultadosPorEsquemaPoolM
+    );
+
+    res.json(datos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos' });
+  }
+};
+
 export const buscarUsuarios = async (req: any, res: any) => {
   try {
     const { page = 1, pageSize = 10 } = req.query;

@@ -5,6 +5,7 @@ import * as express from 'express';
 import {
   buscarSCORM,
   buscarUsuarios,
+  contarUsuarios,
   obtenerDominios,
   obtenerEsquemas,
   verificarSsl,
@@ -17,6 +18,8 @@ const backendApp = express();
 backendApp.use(express.json());
 
 backendApp.get('/dominios', obtenerDominios);
+
+backendApp.get('/contar', contarUsuarios);
 
 backendApp.get('/esquemas', obtenerEsquemas);
 

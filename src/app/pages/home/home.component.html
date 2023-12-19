@@ -1,21 +1,63 @@
 <section class="flex flex-row gap-4 flex-wrap">
-  <div class="card">
-    <div class="card-body">
-      <h3 class="card-header">Titulo de ejemplo</h3>
-      <div class="">Manejo de usuarios, roles y niveles de acceso</div>
-      <div class="card-footer">
-        <button class="btn btn-primary">Go to</button>
+  <div class="card p-4 md:p-6">
+    <div
+      class="flex justify-between border-gray-200 border-b dark:border-gray-700 pb-3"
+    >
+      <dl>
+        <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">
+          Usuarios
+        </dt>
+        <dd
+          class="leading-none text-3xl font-bold text-gray-900 dark:text-white"
+        >
+        {{contador()}}
+        </dd>
+      </dl>
+      <div>
+        <span
+          class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300"
+          >
+          <svg
+            class="w-2.5 h-2.5 me-1.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13V1m0 0L1 5m4-4 4 4"
+            />
+          </svg>
+          Tasa de Crecimiento 23.5%
+          {{ diferencia() }}
+        </span>
       </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <h3 class="card-header">Titulo de ejemplo</h3>
-      <div class="">Manejo de usuarios, roles y niveles de acceso</div>
-      <div class="card-footer">
-        <button class="btn btn-primary">Go to</button>
-      </div>
-    </div>
+    <a
+      href="#"
+      class=" mt-2 uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2"
+    >
+      Ver detalles...
+      <svg
+        class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 6 10"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m1 9 4-4-4-4"
+        />
+      </svg>
+    </a>
   </div>
   <div class="card">
     <div class="card-body">
