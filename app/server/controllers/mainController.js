@@ -94,20 +94,26 @@ const buscarSCORM = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const executeQueryForSchema = (currentEsquema, currentPool) => __awaiter(void 0, void 0, void 0, function* () {
         // Verificar si estamos en la conexión poolM y el esquema no es 'mangus'
         if (currentPool === poolM && currentEsquema !== 'mangus') {
-            console.log(`Ignorando el esquema ${currentEsquema} en la conexión poolM`);
             return [];
         }
         if (currentPool === pool && currentEsquema === 'mangus') {
-            console.log(`Ignorando el esquema ${currentEsquema} en la conexión pool`);
             return [];
         }
         const query = `
-    SELECT '${currentEsquema}' AS esquema, tabla3.code, tabla3.name, tabla4.name, tabla3.course_status_id
+    SELECT '${currentEsquema}' AS esquema, tabla3.code, tabla3.name, tabla4.name as lesson_name, tabla3.course_status_id, td.description AS host, tabla2.id as course_lesson_id
     FROM "${currentEsquema}"."${tablaName}" tabla1
     INNER JOIN "${currentEsquema}"."${tabla2Name}" tabla2 ON tabla1.lesson_id = tabla2.lesson_id
     INNER JOIN "${currentEsquema}"."${tabla3Name}" tabla3 ON tabla2.course_id = tabla3.id
     INNER JOIN "${currentEsquema}"."${tabla4Name}" tabla4 ON tabla1.lesson_id = tabla4.id
-    WHERE tabla1.title = $1
+    JOIN public.tenancies t ON '${currentEsquema}' = t.schema
+    JOIN public.tenancy_domains td ON t.id = td.tenancy_id
+    WHERE
+    t.tenancy_status_id = 3
+    AND td.description != 'qa.mangus.co'
+    AND td.description != 'app.mangus.co'
+    AND td.description != 'localhost'
+    AND tabla1.title = $1
+    AND td.description NOT LIKE '%SUSPENDIDA'
   `;
         try {
             const result = yield currentPool.query(query, [
@@ -148,11 +154,9 @@ const contarUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const executeQueryForSchema = (currentEsquema, currentPool) => __awaiter(void 0, void 0, void 0, function* () {
         // Verificar si estamos en la conexión poolM y el esquema no es 'mangus'
         if (currentPool === poolM && currentEsquema !== 'mangus') {
-            console.log(`Ignorando el esquema ${currentEsquema} en la conexión poolM`);
             return [];
         }
         if (currentPool === pool && currentEsquema === 'mangus') {
-            console.log(`Ignorando el esquema ${currentEsquema} en la conexión pool`);
             return [];
         }
         const query = `

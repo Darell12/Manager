@@ -1,21 +1,41 @@
 <section class="bg-gray-2 rounded-xl">
   <div class="p-8 shadow-lg">
     <form class="space-y-4 mb-6">
-      <div class="flex gap-4">
+      <div class="flex gap-4 align-middle">
         <div>
           <label class="sr-only" for="email">Nombre del Recurso</label>
           <input
             class="input input-solid"
             placeholder="Hidrología"
             type="search"
+            [formControl]="searchrResource"
             id="name"
           />
         </div>
-        <div>
+
+        <input
+          type="file"
+          class="input-file hidden"
+          id="selectedFile"
+          (change)="onFileChange($event)"
+          accept=".zip"
+        />
+        <div class="flex gap-4">
+          <button
+            type="button"
+            onclick="document.getElementById('selectedFile').click();"
+          >
+            <svg height="16" width="16" viewBox="0 0 512 512">
+              <path
+                d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"
+              />
+            </svg>
+          </button>
+
           <button
             type="button"
             class="rounded-lg btn btn-primary"
-            (click)="buscar_recurso(inputValue)"
+            (click)="buscar_recurso(searchrResource.value)"
           >
             Buscar
           </button>
@@ -30,6 +50,7 @@
           <th>Codigo del Curso</th>
           <th>Nombre del Curso</th>
           <th>Nombre de lección</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -40,12 +61,6 @@
           <td><div class="skeleton h-5 rounded-md"></div></td>
           <td><div class="skeleton h-5 rounded-md"></div></td>
           <td><div class="skeleton h-5 rounded-md"></div></td>
-        </tr>
-        <tr>
-          <th><div class="skeleton h-5 rounded-md"></div></th>
-          <td><div class="skeleton h-5 rounded-md"></div></td>
-          <td><div class="skeleton h-5 rounded-md"></div></td>
-          <td><div class="skeleton h-5 rounded-md"></div></td>
           <td><div class="skeleton h-5 rounded-md"></div></td>
         </tr>
         <tr>
@@ -54,14 +69,86 @@
           <td><div class="skeleton h-5 rounded-md"></div></td>
           <td><div class="skeleton h-5 rounded-md"></div></td>
           <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+        </tr>
+        <tr>
+          <th><div class="skeleton h-5 rounded-md"></div></th>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <td><div class="skeleton h-5 rounded-md"></div></td>
+          <!-- <td><div class="dropdown">
+            <label class="btn btn-ghost btn-sm" tabindex="0">
+              <svg
+                class="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 4 15"
+              >
+                <path
+                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                />
+              </svg>
+            </label>
+            <div class="dropdown-menu dropdown-menu-left">
+              <label class="dropdown-item text-sm">Refrescar</label>
+              <a
+                class="dropdown-item text-sm"
+                [href]="'https://' + 'mangusacademy.com' + '#/private/lesson-details-builder/1044'"
+                target="_blank"
+                >Previsualizar</a
+              >
+            </div>
+          </div></td>
+        </tr> -->
         </tr>
         } @else { @for (row of resultados; track $index) {
+        <span class="hidden">
+          {{ setCurrentClasses(row.course_status_id) }}
+        </span>
         <tr>
           <th>{{ $index + 1 }}</th>
           <td>{{ row.esquema }}</td>
           <td>{{ row.code }}</td>
           <td>{{ row.name }}</td>
-          <td>{{ row.course_status_id | courseStatus }}</td>
+          <td>
+            <span [ngClass]="currentClasses">
+              {{ row.course_status_id | courseStatus }}
+            </span>
+          </td>
+          <td>
+            <div class="dropdown">
+              <label class="btn btn-ghost btn-sm" tabindex="0">
+                <svg
+                  class="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 4 15"
+                >
+                  <path
+                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                  />
+                </svg>
+              </label>
+              <div class="dropdown-menu dropdown-menu-left">
+                <label class="dropdown-item text-sm">Refrescar</label>
+                <a
+                  class="dropdown-item text-sm"
+                  [href]="
+                    'https://' +
+                    row.host +
+                    '#/private/lesson-details-builder/' +
+                    row.course_lesson_id
+                  "
+                  target="_blank"
+                  >Previsualizar</a
+                >
+              </div>
+            </div>
+          </td>
         </tr>
         } }
       </tbody>
