@@ -1,3 +1,13 @@
+# Modify AppUpdater.js
+formatDownloadNotification
+`        
+if (downloadNotification == null) {
+  downloadNotification = {
+    title: "Una nueva versión esta lista para instalar",
+    body: `{appName} version {version} fue descargada será instalada automaticamente despues de cerrar la aplicación`,
+  };
+}
+        `
 # Angular17
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
