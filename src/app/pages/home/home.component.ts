@@ -1,7 +1,15 @@
-import { Component, OnInit, ViewChild, computed, signal } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  computed,
+  signal,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { DbService } from '../../services/db.service';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +18,7 @@ import { DbService } from '../../services/db.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   miDato: string = '';
   contador = signal<number>(0);
   contadorAnterior = signal<number>(
@@ -32,13 +40,22 @@ export class HomeComponent implements OnInit {
 
   constructor(private dbservices: DbService) {}
 
+  intervalId: string | number | NodeJS.Timeout | undefined
+
   ngOnInit(): void {
     this.contar_user();
 
-    const intervalId = setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.contar_user();
       console.log('periodica');
     }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
+    console.log(
+      'La ejecución periódica ha sido detenida'
+    );
   }
 
   contar_user() {

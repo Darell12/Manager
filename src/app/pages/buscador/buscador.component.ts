@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DbService } from '../../services/db.service';
-import { Observable } from 'rxjs';
-import { CourseStatusPipe } from '../../pipes/course-status-pipe';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
-import { switchMap } from 'rxjs/operators';
+
+import { DbService } from '../../services/db.service';
+import { CourseStatusPipe } from '../../pipes/course-status-pipe';
+import { TruncatePipe } from '../../pipes/truncate-pipe';
 
 import JSZip from 'jszip';
 
@@ -13,7 +13,13 @@ import JSZip from 'jszip';
   standalone: true,
   templateUrl: './buscador.component.html',
   styleUrl: './buscador.component.css',
-  imports: [CourseStatusPipe, ReactiveFormsModule, CommonModule, NgClass],
+  imports: [
+    CourseStatusPipe,
+    ReactiveFormsModule,
+    CommonModule,
+    NgClass,
+    TruncatePipe,
+  ],
 })
 export class BuscadorComponent implements OnInit {
   loading: boolean = true;
@@ -33,31 +39,30 @@ export class BuscadorComponent implements OnInit {
 
   currentClasses: string = 'badge';
 
-    setCurrentClasses(value: number | string) {
-      // CSS classes: added/removed per current state of component properties
-      let badge = 'badge'
-      let badge_success = 'badge badge-outline-success'
-      let badge_primary = 'badge badge-outline-primary'
-      let badge_warning = 'badge badge-outline-warning'
-      let badge_error = 'badge badge-outline-error'
-      let badge_secondary = 'badge badge-outline-secondary'
+  setCurrentClasses(value: number | string) {
+    // CSS classes: added/removed per current state of component properties
+    let badge = 'badge';
+    let badge_success = 'badge badge-outline-success';
+    let badge_primary = 'badge badge-outline-primary';
+    let badge_warning = 'badge badge-outline-warning';
+    let badge_error = 'badge badge-outline-error';
+    let badge_secondary = 'badge badge-outline-secondary';
 
-      switch (value) {
-        case 1:
-        return this.currentClasses = badge_success
-        case 2:
-          return this.currentClasses = badge_primary
-        case 3:
-        return this.currentClasses = badge_warning
-        case 4:
-        return this.currentClasses = badge_error
-        case 5:
-        return this.currentClasses = badge_secondary
-        default:
-          return this.currentClasses;
-      }
+    switch (value) {
+      case 1:
+        return (this.currentClasses = badge_success);
+      case 2:
+        return (this.currentClasses = badge_primary);
+      case 3:
+        return (this.currentClasses = badge_warning);
+      case 4:
+        return (this.currentClasses = badge_error);
+      case 5:
+        return (this.currentClasses = badge_secondary);
+      default:
+        return this.currentClasses;
     }
-
+  }
 
   buscar_recurso(value: string) {
     console.log('click');
@@ -123,9 +128,9 @@ export class BuscadorComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error)
+          console.log(error);
         }
-      )
+      );
 
       const formattedTitleWithOrg = formattedTitle + '_ORG';
 
@@ -143,14 +148,10 @@ export class BuscadorComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error)
+            console.log(error);
           }
-        )
+        );
       }, 1000);
     }
-
-
-
-
   }
 }

@@ -2,10 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'courseStatus',
-    standalone: true
+  standalone: true,
 })
 export class CourseStatusPipe implements PipeTransform {
-
   transform(courseStatusId: number): string {
     // Aquí puedes mapear los IDs a los nombres correspondientes
     switch (courseStatusId) {
@@ -14,14 +13,13 @@ export class CourseStatusPipe implements PipeTransform {
       case 2:
         return 'En Edición';
       case 3:
-        return 'Revisión'
+        return 'Revisión';
       case 4:
-        return 'Eliminado'
+        return 'Eliminado';
       case 5:
-        return 'Necesita correcciones'
+        return 'Necesita correcciones';
       default:
         return 'Desconocido';
     }
   }
-
 }

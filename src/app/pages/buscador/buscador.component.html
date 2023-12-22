@@ -112,7 +112,7 @@
           <th>{{ $index + 1 }}</th>
           <td>{{ row.esquema }}</td>
           <td>{{ row.code }}</td>
-          <td>{{ row.name }}</td>
+          <td>{{ row.name | truncate }}</td>
           <td>
             <span [ngClass]="currentClasses">
               {{ row.course_status_id | courseStatus }}

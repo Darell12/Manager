@@ -13,20 +13,21 @@ exports.buscarUsuarios = exports.contarUsuarios = exports.buscarSCORM = exports.
 const axios_1 = require("axios");
 const pg_1 = require("pg");
 require('dotenv').config();
+const config_1 = require("../config");
 // * CONEXION TENENCIAS
 const poolConfig = {
-    user: process.env['DB_USER'],
-    host: process.env['DBT_HOST'],
-    database: process.env['DBT'],
-    password: process.env['DBPASS'],
+    user: config_1.DB_USER,
+    host: config_1.DBT_HOST,
+    database: config_1.DBT,
+    password: config_1.DBPASS,
     port: 5432, // Puerto predeterminado de PostgreSQL
 };
 // * CONEXION MANGUS
 const poolConfigMangus = {
-    user: process.env['DB_USER'],
-    host: process.env['DBM_HOST'],
-    database: process.env['DBM'],
-    password: process.env['DBPASS'],
+    user: config_1.DB_USER,
+    host: config_1.DBM_HOST,
+    database: config_1.DBM,
+    password: config_1.DBPASS,
     port: 5432, // Puerto predeterminado de PostgreSQL
 };
 const pool = new pg_1.Pool(poolConfig);
