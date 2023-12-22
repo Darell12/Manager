@@ -10,6 +10,14 @@ import {
   obtenerEsquemas,
   verificarSsl,
 } from './server/controllers/mainController';
+import log from 'electron-log';
+const { autoUpdater } = require('electron-updater');
+require('dotenv').config();
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
 
 const port = process.env['PORT'] || 3000;
 
@@ -34,6 +42,13 @@ backendApp.listen(port, () => {
 });
 
 let win: BrowserWindow | null = null;
+
+function sendStatusToWindow(text: string) {
+  log.info(text);
+  //@ts-ignore
+  win.webContents.send('message', text);
+}
+
 const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 
@@ -86,7 +101,37 @@ function createWindow(): BrowserWindow {
 try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
-  app.on('ready', () => setTimeout(createWindow, 400));
+  // app.on('ready', () => setTimeout(createWindow, 400));
+
+
+
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for update...');
+  })
+  autoUpdater.on('update-available', (info: any) => {
+    sendStatusToWindow('Update available.');
+  })
+  autoUpdater.on('update-not-available', (info: any) => {
+    sendStatusToWindow('Update not available.');
+  })
+  autoUpdater.on('error', (err: string) => {
+    sendStatusToWindow('Error in auto-updater. ' + err);
+  })
+
+  autoUpdater.on('download-progress', (progressObj: { bytesPerSecond: string; percent: string; transferred: string; total: string; }) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    sendStatusToWindow(log_message);
+  })
+
+  autoUpdater.on('update-downloaded', (info: any) => {
+    sendStatusToWindow('Update downloaded');
+  });
+
+  app.on('ready', function() {
+    createWindow();
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -95,6 +140,10 @@ try {
     if (process.platform !== 'darwin') {
       app.quit();
     }
+  });
+
+  app.on('ready', function()  {
+    autoUpdater.checkForUpdatesAndNotify();
   });
 
   app.on('browser-window-focus', function () {

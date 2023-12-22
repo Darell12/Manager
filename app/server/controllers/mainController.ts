@@ -1,21 +1,23 @@
 import axios from 'axios';
 import { Pool, PoolConfig, QueryResult } from 'pg';
+require('dotenv').config();
+import {DBM, DBM_HOST, DBPASS, DBT, DBT_HOST, DB_USER} from '../config'
 
 // * CONEXION TENENCIAS
 const poolConfig: PoolConfig = {
-  user: 'dev_user',
-  host: 'tenancies.cskfoquuftxn.us-east-1.rds.amazonaws.com',
-  database: 'tenancies',
-  password: 'XfRAQ.gO%a$Snj2',
+  user: DB_USER,
+  host: DBT_HOST,
+  database: DBT,
+  password: DBPASS,
   port: 5432, // Puerto predeterminado de PostgreSQL
 };
 
 // * CONEXION MANGUS
 const poolConfigMangus: PoolConfig = {
-  user: 'dev_user',
-  host: 'mangus-prod.cskfoquuftxn.us-east-1.rds.amazonaws.com',
-  database: 'mangus',
-  password: 'XfRAQ.gO%a$Snj2',
+  user: DB_USER,
+  host: DBM_HOST,
+  database: DBM,
+  password: DBPASS,
   port: 5432, // Puerto predeterminado de PostgreSQL
 };
 

@@ -13,5 +13,11 @@
       "from": "../dist/browser",
       "filter": ["**/*"]
     }
-  ]
+  ],
+  "publish": {
+    "provider": "github",
+    "owner": "Darell12",
+    "repo": "Manager",
+    "token": "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"
+  }
 }

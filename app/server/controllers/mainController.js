@@ -12,20 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscarUsuarios = exports.contarUsuarios = exports.buscarSCORM = exports.verificarSsl = exports.obtenerDominios = exports.obtenerEsquemas = void 0;
 const axios_1 = require("axios");
 const pg_1 = require("pg");
+require('dotenv').config();
 // * CONEXION TENENCIAS
 const poolConfig = {
-    user: 'dev_user',
-    host: 'tenancies.cskfoquuftxn.us-east-1.rds.amazonaws.com',
-    database: 'tenancies',
-    password: 'XfRAQ.gO%a$Snj2',
+    user: process.env['DB_USER'],
+    host: process.env['DBT_HOST'],
+    database: process.env['DBT'],
+    password: process.env['DBPASS'],
     port: 5432, // Puerto predeterminado de PostgreSQL
 };
 // * CONEXION MANGUS
 const poolConfigMangus = {
-    user: 'dev_user',
-    host: 'mangus-prod.cskfoquuftxn.us-east-1.rds.amazonaws.com',
-    database: 'mangus',
-    password: 'XfRAQ.gO%a$Snj2',
+    user: process.env['DB_USER'],
+    host: process.env['DBM_HOST'],
+    database: process.env['DBM'],
+    password: process.env['DBPASS'],
     port: 5432, // Puerto predeterminado de PostgreSQL
 };
 const pool = new pg_1.Pool(poolConfig);
