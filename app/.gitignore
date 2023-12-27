@@ -13,7 +13,8 @@ src/**/*.js
 
 # dependencies
 node_modules
-config.ts
+config.js
+serverconfig.js
 # IDEs and editors
 .idea
 .project

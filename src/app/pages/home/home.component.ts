@@ -10,11 +10,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { DbService } from '../../services/db.service';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -40,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private dbservices: DbService) {}
 
-  intervalId: string | number | NodeJS.Timeout | undefined
+  intervalId: string | number | NodeJS.Timeout | undefined;
 
   ngOnInit(): void {
     this.contar_user();
@@ -53,9 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.intervalId);
-    console.log(
-      'La ejecución periódica ha sido detenida'
-    );
+    console.log('La ejecución periódica ha sido detenida');
   }
 
   contar_user() {

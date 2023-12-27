@@ -5,6 +5,7 @@ import { ElectronService } from './core/services';
 import { RouterLink } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -20,9 +21,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-17';
   sidebarState = signal<boolean>(false);
+  // version = signal();
+  version: string = 'Cargando...';
 
   css = computed(() => {
     const sidebarState = this.sidebarState();
@@ -43,9 +46,16 @@ export class AppComponent {
       console.log('Run in electron');
       console.log('Electron ipcRenderer', this.electronService.ipcRenderer);
       console.log('NodeJS childProcess', this.electronService.childProcess);
+      //@ts-ignore
+      // this.version = this.electronService.getVersion();
     } else {
       console.log('Run in browser');
     }
+  }
+
+  ngOnInit() {
+    // Llama al método getVersion para obtener la versión
+    // this.version.set(this.electronService.getVersion());
   }
 
   tooglenav() {

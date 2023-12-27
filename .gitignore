@@ -16,6 +16,7 @@ node_modules
 /node_modules
 
 /server/config.ts
+/server/config.js
 # IDEs and editors
 .idea
 .project

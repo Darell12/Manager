@@ -1,0 +1,11 @@
+.version {
+    position: fixed;
+    bottom: 10px; /* Ajusta la distancia desde la parte inferior según tus necesidades */
+    left: 10px; /* Ajusta la distancia desde la izquierda según tus necesidades */
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    z-index: 999;
+  }
