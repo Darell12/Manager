@@ -1,17 +1,17 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
-import { DbService } from '../../services/db.service';
+import {Component, OnInit, computed, signal} from '@angular/core';
+import {DbService} from '../../services/db.service';
 import {
   DomSanitizer,
   SafeResourceUrl,
 } from '@angular/platform-browser';
-import { CommonModule, NgClass } from '@angular/common';
+import {CommonModule, NgClass} from '@angular/common';
 import {
   FilterType,
-  Ssl,
-  dominioModel,
-} from '../../models/basic-info';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TenenciasTableComponent } from './components/tenencias-table/tenencias-table.component';
+  ISsl,
+  IDomain,
+} from '../../core/interfaces/domain.interface';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {TenenciasTableComponent} from './components/tenencias-table/tenencias-table.component';
 
 @Component({
   selector: 'app-tenencias',
@@ -26,22 +26,24 @@ import { TenenciasTableComponent } from './components/tenencias-table/tenencias-
   styleUrl: './tenencias.component.css',
 })
 export class TenenciasComponent implements OnInit {
-  dominios: any[] | undefined;
-  dominiosSignal = signal<dominioModel[]>([]);
+  current_tenancy: SafeResourceUrl = '';
+  iframeWidth = '50vw';
+  iframeHeight = '70vh';
 
+  dominiosSignal = signal<IDomain[]>([]);
   filter = signal<FilterType>('all');
+  rowsSignal = signal<ISsl[]>([]);
+  searchQuery = signal<string>('');
 
-  rows: any[] = [];
-  rowsSignal = signal<Ssl[]>([]);
+  onSearchUpdated(sq: string) {
+    this.searchQuery.set(sq);
+  }
 
   searchTenencia = new FormControl('', {
     nonNullable: true,
   });
 
-  searchQuery = signal<string>('');
-  onSearchUpdated(sq: string) {
-    this.searchQuery.set(sq);
-  }
+  rows: any[] = [];
 
   tenencias = computed(() => {
     const filter = this.filter();
@@ -62,21 +64,8 @@ export class TenenciasComponent implements OnInit {
     }
   });
 
-  search() {
-    const search = this.searchTenencia.value.trim();
-    return this.rowsSignal.update((prev_tenencia) => {
-      return prev_tenencia.filter((row) => row.host != search);
-    });
+  constructor(private dbservices: DbService, private sanitizer: DomSanitizer) {
   }
-
-  current_tenancy: SafeResourceUrl = '';
-
-  filtro: string = '';
-
-  iframeWidth = '50vw';
-  iframeHeight = '70vh';
-
-  constructor(private dbservices: DbService, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     console.log('render');
@@ -85,12 +74,9 @@ export class TenenciasComponent implements OnInit {
 
   obtenerDatos() {
     this.dbservices.obtenerDominios().subscribe(
-      (result: dominioModel[]) => {
-        console.log(result);
-        this.dominios = result;
+      (result: IDomain[]) => {
         this.dominiosSignal.set(result);
-        // Validamos cada dominio
-        //@ts-ignore
+
         this.dominiosSignal().map((dominio) => {
           this.dbservices.verificarSsl(dominio.url).subscribe(
             (result: any) => {
@@ -121,7 +107,6 @@ export class TenenciasComponent implements OnInit {
   }
 
   refrescarFila(url: string) {
-    // Buscamos la fila en base a la URL y la refrescamos
     console.log('refresh');
     console.log(this.rows);
     const fila = this.rows.find((row) => row.host == url);
@@ -130,21 +115,11 @@ export class TenenciasComponent implements OnInit {
       this.dbservices.verificarSsl(url).subscribe(
         (result: any) => {
           Object.assign(fila, result);
-          console.log('refresh');
-          console.log('refresh');
         },
         (error: any) => {
           console.log('Error al refrescar fila:', error);
         }
       );
     }
-  }
-
-  filtrarDatos(): any[] {
-    return this.rows.filter(
-      (item) =>
-        item.result.host.toLowerCase().includes(this.filtro.toLowerCase()) ||
-        item.result.cert_valid.toLowerCase().includes(this.filtro.toLowerCase())
-    );
   }
 }

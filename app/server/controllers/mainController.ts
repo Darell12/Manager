@@ -257,10 +257,9 @@ export const buscarUsuarios = async (req: any, res: any) => {
     const offset = (page - 1) * pageSize;
     // Realiza la consulta a la base de datos
     const result = await poolM.query(
-      'SELECT * FROM mangus.users OFFSET $1 LIMIT $2',
+      'SELECT id, name, email, active, identification, address FROM mangus.users OFFSET $1 LIMIT $2',
       [offset, pageSize]
     );
-
     res.json(result.rows);
   } catch (error) {
     console.error('Error al obtener usuarios:', error);

@@ -1,19 +1,19 @@
-export interface dominioModel {
+export interface IDomain {
   url: string;
   name: string;
 }
 
 export type FilterType = 'active' | 'expired' | 'all';
 
-export interface Ssl {
+export interface ISsl {
     version:           string;
     app:               string;
     host:              string;
     response_time_sec: string;
-    result:            ResultSsl;
+    result:            IDetailSsl;
 }
 
-export interface ResultSsl {
+export interface IDetailSsl {
     host:                 string;
     resolved_ip:          string;
     issued_to:            string;

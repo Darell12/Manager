@@ -1,7 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgClass } from '@angular/common';
-import { FilterType, Ssl, dominioModel } from '../../../../models/basic-info';
+import { FilterType, ISsl, IDomain } from '../../../../core/interfaces/domain.interface';
 import { DbService } from '../../../../services/db.service';
 
 @Component({
@@ -14,12 +14,12 @@ import { DbService } from '../../../../services/db.service';
 export class TenenciasTableComponent {
 
   dominios: any[] | undefined;
-  dominiosSignal = signal<dominioModel[]>([]);
+  dominiosSignal = signal<IDomain[]>([]);
 
   filter = signal<FilterType>('all');
 
   rows: any[] = [];
-  rowsSignal = signal<Ssl[]>([]);
+  rowsSignal = signal<ISsl[]>([]);
 
   tenencias = computed(() => {
     const filter = this.filter();
@@ -51,7 +51,7 @@ export class TenenciasTableComponent {
 
   obtenerDatos() {
     this.dbservices.obtenerDominios().subscribe(
-      (result: dominioModel[]) => {
+      (result: IDomain[]) => {
         console.log(result);
         this.dominios = result;
         this.dominiosSignal.set(result);

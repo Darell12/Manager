@@ -67,7 +67,7 @@ export class BuscadorComponent implements OnInit {
   buscar_recurso(value: string) {
     console.log('click');
     this.loading = true;
-    this.dbservices.obtenerRegistros(value).subscribe(
+    this.dbservices.obtenerRecursos(value).subscribe(
       (result: IScorm[]) => {
         this.resultados = result;
         this.loading = false;
@@ -119,7 +119,7 @@ export class BuscadorComponent implements OnInit {
     if (title != 'No title found') {
       //@ts-ignore
       const formattedTitle = title.replace(/\s+/g, '_');
-      this.dbservices.obtenerRegistros(formattedTitle).subscribe(
+      this.dbservices.obtenerRecursos(formattedTitle).subscribe(
         (result: IScorm[]) => {
           console.log(result);
           if (result != null) {
@@ -135,7 +135,7 @@ export class BuscadorComponent implements OnInit {
       const formattedTitleWithOrg = formattedTitle + '_ORG';
 
       setTimeout(() => {
-        this.dbservices.obtenerRegistros(formattedTitleWithOrg).subscribe(
+        this.dbservices.obtenerRecursos(formattedTitleWithOrg).subscribe(
           (result: IScorm[]) => {
             if (result != null) {
               if (this.resultados.length === 0) {

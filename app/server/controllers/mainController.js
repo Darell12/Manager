@@ -194,7 +194,7 @@ const buscarUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const { page = 1, pageSize = 10 } = req.query;
         const offset = (page - 1) * pageSize;
         // Realiza la consulta a la base de datos
-        const result = yield poolM.query('SELECT * FROM mangus.users OFFSET $1 LIMIT $2', [offset, pageSize]);
+        const result = yield poolM.query('SELECT id, name, email, active, identification, address FROM mangus.users OFFSET $1 LIMIT $2', [offset, pageSize]);
         res.json(result.rows);
     }
     catch (error) {
