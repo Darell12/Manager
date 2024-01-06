@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, NgClass } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule, NgClass} from '@angular/common';
 
-import { DbService } from '../../services/db.service';
-import { CourseStatusPipe } from '../../pipes/course-status-pipe';
-import { TruncatePipe } from '../../pipes/truncate-pipe';
+import {DbService} from '../../services/db.service';
+import {CourseStatusPipe} from '../../pipes/course-status-pipe';
+import {TruncatePipe} from '../../pipes/truncate-pipe';
 
 import JSZip from 'jszip';
+import {IScorm} from "../../core/interfaces/scorm.interface";
 
 @Component({
   selector: 'app-buscador',
@@ -24,14 +25,14 @@ import JSZip from 'jszip';
 export class BuscadorComponent implements OnInit {
   loading: boolean = true;
   data: any = [];
-  resultados: any = [];
-  inputValue: string = '';
+  resultados: IScorm[] = []
 
   searchrResource = new FormControl('', {
     nonNullable: true,
   });
 
-  constructor(private dbservices: DbService) {}
+  constructor(private dbservices: DbService) {
+  }
 
   ngOnInit(): void {
     console.log('render');
@@ -67,7 +68,7 @@ export class BuscadorComponent implements OnInit {
     console.log('click');
     this.loading = true;
     this.dbservices.obtenerRegistros(value).subscribe(
-      (result: any) => {
+      (result: IScorm[]) => {
         this.resultados = result;
         this.loading = false;
         console.log(result);
@@ -119,7 +120,7 @@ export class BuscadorComponent implements OnInit {
       //@ts-ignore
       const formattedTitle = title.replace(/\s+/g, '_');
       this.dbservices.obtenerRegistros(formattedTitle).subscribe(
-        (result: any) => {
+        (result: IScorm[]) => {
           console.log(result);
           if (result != null) {
             this.resultados = result;
@@ -135,8 +136,7 @@ export class BuscadorComponent implements OnInit {
 
       setTimeout(() => {
         this.dbservices.obtenerRegistros(formattedTitleWithOrg).subscribe(
-          (result: any) => {
-            console.log(result);
+          (result: IScorm[]) => {
             if (result != null) {
               if (this.resultados.length === 0) {
                 this.resultados = result;

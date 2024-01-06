@@ -34,7 +34,6 @@ const pool = new pg_1.Pool(poolConfig);
 const poolM = new pg_1.Pool(poolConfigMangus);
 const obtenerEsquemas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const esquemaAIgnorar = 'wrocolombia';
-    const tablaName = 'lesson_scorms';
     try {
         const result = yield pool.query("SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_name = 'lesson_scorms'");
         const esquemas = result.rows.map((row) => row.table_schema);
