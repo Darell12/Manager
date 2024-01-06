@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Pool, PoolConfig, QueryResult } from 'pg';
 require('dotenv').config();
-import {DBM, DBM_HOST, DBPASS, DBT, DBT_HOST, DB_USER} from '../config'
+import { DBM, DBM_HOST, DBPASS, DBT, DBT_HOST, DB_USER } from '../config';
 
 // * CONEXION TENENCIAS
 const poolConfig: PoolConfig = {
@@ -26,7 +26,6 @@ const poolM = new Pool(poolConfigMangus);
 
 export const obtenerEsquemas = async (req: any, res: any) => {
   const esquemaAIgnorar = 'wrocolombia';
-  const tablaName = 'lesson_scorms';
   try {
     const result: QueryResult = await pool.query(
       "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_name = 'lesson_scorms'"
@@ -173,7 +172,6 @@ export const buscarSCORM = async (req: any, res: any) => {
 };
 
 export const contarUsuarios = async (req: any, res: any) => {
-
   const esquemaAIgnorar = 'wrocolombia';
 
   const tablaName = 'users';
@@ -258,10 +256,10 @@ export const buscarUsuarios = async (req: any, res: any) => {
     const { page = 1, pageSize = 10 } = req.query;
     const offset = (page - 1) * pageSize;
     // Realiza la consulta a la base de datos
-    const result = await poolM.query('SELECT * FROM mangus.users OFFSET $1 LIMIT $2', [
-      offset,
-      pageSize,
-    ]);
+    const result = await poolM.query(
+      'SELECT * FROM mangus.users OFFSET $1 LIMIT $2',
+      [offset, pageSize]
+    );
 
     res.json(result.rows);
   } catch (error) {

@@ -57,12 +57,12 @@
           <td>
             <span
               [ngClass]="
-                row.result.cert_valid == false
+                !row.result.cert_valid
                   ? 'badge badge-error'
                   : 'badge badge-success'
               "
               >{{
-                row.result.cert_valid == false ? "Expirado" : "Activo"
+                !row.result.cert_valid ? "Expirado" : "Activo"
               }}</span
             >
           </td>

@@ -1,6 +1,6 @@
-import { Component, computed, signal, Input } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CommonModule, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FilterType, Ssl, dominioModel } from '../../../../models/basic-info';
 import { DbService } from '../../../../services/db.service';
 
@@ -57,7 +57,7 @@ export class TenenciasTableComponent {
         this.dominiosSignal.set(result);
         // Validamos cada dominio
         //@ts-ignore
-        this.dominiosSignal().map((dominio, index) => {
+        this.dominiosSignal().map((dominio) => {
           this.dbservices.verificarSsl(dominio.url).subscribe(
             (result: any) => {
               const existingRow = this.rows.find(

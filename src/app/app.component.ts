@@ -1,9 +1,8 @@
-import { Component, ViewChild, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { ElectronService } from './core/services';
 import { RouterLink } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OnInit } from '@angular/core';
 

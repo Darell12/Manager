@@ -3,12 +3,10 @@ import { DbService } from '../../services/db.service';
 import {
   DomSanitizer,
   SafeResourceUrl,
-  SafeUrl,
 } from '@angular/platform-browser';
 import { CommonModule, NgClass } from '@angular/common';
 import {
   FilterType,
-  ResultSsl,
   Ssl,
   dominioModel,
 } from '../../models/basic-info';
@@ -93,7 +91,7 @@ export class TenenciasComponent implements OnInit {
         this.dominiosSignal.set(result);
         // Validamos cada dominio
         //@ts-ignore
-        this.dominiosSignal().map((dominio, index) => {
+        this.dominiosSignal().map((dominio) => {
           this.dbservices.verificarSsl(dominio.url).subscribe(
             (result: any) => {
               const existingRow = this.rows.find(

@@ -41,7 +41,6 @@ export class BuscadorComponent implements OnInit {
 
   setCurrentClasses(value: number | string) {
     // CSS classes: added/removed per current state of component properties
-    let badge = 'badge';
     let badge_success = 'badge badge-outline-success';
     let badge_primary = 'badge badge-outline-primary';
     let badge_warning = 'badge badge-outline-warning';

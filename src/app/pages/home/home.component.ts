@@ -2,14 +2,10 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  ViewChild,
   computed,
   signal,
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { DbService } from '../../services/db.service';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { RouterLink } from '@angular/router';
 
 @Component({

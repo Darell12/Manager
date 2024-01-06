@@ -21,6 +21,7 @@ log.info('App starting...');
 
 const port = process.env['PORT'] || 3000;
 
+// @ts-ignore
 const backendApp = express();
 
 backendApp.use(express.json());
@@ -73,7 +74,7 @@ function createWindow(): BrowserWindow {
     debug();
 
     require('electron-reloader')(module);
-    win.loadURL('http://localhost:4200');
+    win.loadURL('http://localhost:4200')
   } else {
     // Path when running electron executable
     let pathIndex = './index.html';
@@ -108,10 +109,10 @@ try {
   autoUpdater.on('checking-for-update', () => {
     sendStatusToWindow('Checking for update...');
   })
-  autoUpdater.on('update-available', (info: any) => {
+  autoUpdater.on('update-available', () => {
     sendStatusToWindow('Update available.');
   })
-  autoUpdater.on('update-not-available', (info: any) => {
+  autoUpdater.on('update-not-available', () => {
     sendStatusToWindow('Update not available.');
   })
   autoUpdater.on('error', (err: string) => {
@@ -125,7 +126,7 @@ try {
     sendStatusToWindow(log_message);
   })
 
-  autoUpdater.on('update-downloaded', (info: any) => {
+  autoUpdater.on('update-downloaded', () => {
     sendStatusToWindow('Update downloaded');
   });
 
